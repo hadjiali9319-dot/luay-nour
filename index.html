@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>لؤي ونور</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Baloo+Bhaijaan+2:wght@500;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EAF6FF;--ink:#1D2B53;--card:#fff;--c1:#FFD23F;--c2:#FF7B7B;--c3:#5FD3A5;--c4:#7BB6FF;--c5:#C79BFF;--on:#1D2B53;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121A33;--ink:#F2F6FF;--card:#1E2A4D;--c1:#E8B923;--c2:#E86A6A;--c3:#41B98C;--c4:#5A9BE8;--c5:#A97FE6;--on:#14203F}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Baloo Bhaijaan 2","Segoe UI",Tahoma,sans-serif}
+body{padding:16px;max-width:520px;margin:0 auto;min-height:100%}
+h1{margin:4px 0 12px;font-size:2rem;text-align:center;font-weight:800}
+.tabs{display:flex;gap:10px;margin-bottom:16px}
+.tabs button{flex:1;font:inherit;font-size:.92rem;font-weight:800;padding:10px 2px;border:3px solid var(--ink);border-radius:20px;background:var(--card);color:var(--ink);cursor:pointer}
+.tabs button.on{background:var(--c1);color:var(--on)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.tile{aspect-ratio:1;border:0;border-radius:22px;font:inherit;font-size:2.4rem;font-weight:800;color:var(--on);cursor:pointer;box-shadow:0 5px 0 rgba(0,0,0,.25)}
+.tile:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,.25)}
+button:focus-visible{outline:4px solid var(--ink);outline-offset:3px}
+.card{position:fixed;inset:0;background:var(--bg);display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:20px;z-index:5;text-align:center}
+.card.show{display:flex}
+.big{font-size:9rem;font-weight:800;line-height:1.1;width:min(78vw,300px);border-radius:40px;color:var(--on);padding:10px 0}
+.emo{font-size:5.5rem;line-height:1}
+.word{font-size:2.6rem;font-weight:800}
+.row{display:flex;gap:12px;margin-top:8px}
+.btn{font:inherit;font-size:1.5rem;font-weight:800;border:3px solid var(--ink);background:var(--card);color:var(--ink);border-radius:20px;padding:10px 22px;cursor:pointer;min-width:64px}
+.btn.main{background:var(--c3);color:var(--on)}
+.close{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));inset-inline-start:14px}
+#play{display:none;text-align:center}
+.q{font-size:2rem;font-weight:800;margin:6px 0 16px}
+.opts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.opts .tile{font-size:3.6rem}
+.stars{font-size:1.6rem;margin-bottom:6px;min-height:2.2rem}
+.shake{animation:sh .35s}
+.btn.sm{font-size:1rem;padding:6px 12px;min-width:0}
+.btn.on{background:var(--c1);color:var(--on)}
+.v{display:block;width:100%;text-align:center;font-family:"Amiri Quran",serif;font-size:1.9rem;line-height:2.3;padding:8px;border-radius:16px;background:var(--card);color:var(--ink);border:2px solid transparent;margin:6px 0;cursor:pointer}
+.v.hl{background:var(--c1);color:var(--on)}
+.sn{font-size:1.5rem;font-weight:800;margin:18px 0 4px;text-align:center}
+.bs{text-align:center;font-family:"Amiri Quran",serif;font-size:1.6rem}
+@keyframes sh{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+@media (prefers-reduced-motion:reduce){.shake{animation:none}}
+</style>
+</head>
+<body>
+<div class="card show" id="hi"><div class="big" style="font-size:3.6rem;line-height:1.4;background:var(--c1)">أهلاً<br>لؤي ونور</div><div class="emo">🌟</div><button class="btn main" id="go">ابدأ</button></div>
+<h1>لؤي ونور 🌟</h1>
+<div class="tabs"><button id="tl" class="on">حروف</button><button id="ta">حيوانات</button><button id="tq">قرآن</button><button id="td">أدعية</button><button id="tp">العب</button></div>
+<div id="learn" class="grid"></div>
+<div id="animals" class="grid" style="display:none;grid-template-columns:repeat(3,1fr)"></div>
+<div id="quran" style="display:none"></div>
+<div id="dua" style="display:none"></div>
+<div id="play">
+  <div class="row" id="gm" style="justify-content:center;flex-wrap:wrap;margin:0 0 12px"></div>
+  <div class="stars" id="stars"></div>
+  <div class="q" id="q"></div>
+  <div class="opts" id="opts"></div>
+  <div class="row" style="justify-content:center;margin-top:18px"><button class="btn" id="again">🔊 أعد السؤال</button></div>
+</div>
+<div class="card" id="card">
+  <button class="btn close" id="x" aria-label="إغلاق">✕</button>
+  <div class="big" id="bl"></div>
+  <div class="emo" id="be"></div>
+  <div class="word" id="bw"></div>
+  <div class="row">
+    <button class="btn" id="nx" aria-label="التالي">◀</button>
+    <button class="btn main" id="sp">🔊 استمع</button>
+    <button class="btn" id="pv" aria-label="السابق">▶</button>
+  </div>
+</div>
+<script>
+const L=[["أ","ألف","أرنب","🐰"],["ب","باء","بطة","🦆"],["ت","تاء","تفاحة","🍎"],["ث","ثاء","ثعلب","🦊"],["ج","جيم","جمل","🐪"],["ح","حاء","حصان","🐴"],["خ","خاء","خروف","🐑"],["د","دال","دجاجة","🐔"],["ذ","ذال","ذرة","🌽"],["ر","راء","ريشة","🪶"],["ز","زاي","زرافة","🦒"],["س","سين","سمكة","🐟"],["ش","شين","شمس","☀️"],["ص","صاد","صاروخ","🚀"],["ض","ضاد","ضفدع","🐸"],["ط","طاء","طائرة","✈️"],["ظ","ظاء","ظرف","✉️"],["ع","عين","عنب","🍇"],["غ","غين","غيمة","☁️"],["ف","فاء","فراشة","🦋"],["ق","قاف","قمر","🌙"],["ك","كاف","كلب","🐶"],["ل","لام","ليمون","🍋"],["م","ميم","موزة","🍌"],["ن","نون","نحلة","🐝"],["ه","هاء","هدية","🎁"],["و","واو","وردة","🌹"],["ي","ياء","يد","✋"]];
+const $=id=>document.getElementById(id);
+const col=i=>"var(--c"+(i%5+1)+")";
+let cur=0,target=0,score=0;
+function say(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="ar-SA";u.rate=.8;speechSynthesis.speak(u)}catch(e){}}
+const g=$("learn");
+L.forEach((l,i)=>{const b=document.createElement("button");b.className="tile";b.style.background=col(i);b.textContent=l[0];b.onclick=()=>open(i,"L");g.appendChild(b)});
+$("go").onclick=()=>{$("hi").classList.remove("show");say("أهلاً لؤي ونور")};
+let mode="L";
+function open(i,m){if(m)mode=m;const D=mode=="L"?L:A;cur=(i+D.length)%D.length;const d=D[cur],big=$("bl");big.style.background=col(cur);if(mode=="L"){big.textContent=d[0];big.style.fontSize="";$("be").textContent=d[3];$("bw").textContent=d[2]}else{big.textContent=d[1];big.style.fontSize="6rem";$("be").textContent="";$("bw").textContent=d[0]}$("card").classList.add("show");speakCur()}
+function speakCur(){const d=mode=="L"?L[cur]:A[cur];say(mode=="L"?d[1]+"، "+d[2]:d[0]+"، "+d[2])}
+$("sp").onclick=speakCur;
+$("nx").onclick=()=>open(cur+1);
+$("pv").onclick=()=>open(cur-1);
+$("x").onclick=()=>{$("card").classList.remove("show");speechSynthesis.cancel&&speechSynthesis.cancel()};
+function tab(n){const m={tl:"learn",ta:"animals",tq:"quran",td:"dua",tp:"play"};for(const k in m){$(m[k]).style.display=k==n?(k=="tl"||k=="ta"?"grid":"block"):"none";$(k).classList.toggle("on",k==n)}if(n=="tp")round();else{try{speechSynthesis.cancel()}catch(e){}}}
+for(const k of["tl","ta","tq","td","tp"])$(k).onclick=()=>tab(k);
+function round1(){
+  target=Math.floor(Math.random()*L.length);
+  const s=new Set([target]);while(s.size<3)s.add(Math.floor(Math.random()*L.length));
+  const o=[...s].sort(()=>Math.random()-.5);
+  $("q").textContent="أين حرف "+L[target][0]+"؟";
+  $("stars").textContent="⭐".repeat(Math.min(score,10));
+  const box=$("opts");box.innerHTML="";
+  o.forEach(i=>{const b=document.createElement("button");b.className="tile";b.style.background=col(i);b.textContent=L[i][0];
+    b.onclick=()=>{if(i===target){score++;say("أحسنت! "+L[i][1]);b.textContent="✔️";setTimeout(round,900)}else{b.classList.add("shake");say("حاول مرة أخرى")}};
+    box.appendChild(b)});
+  say("أين حرف "+L[target][1]);
+}
+let game=0,lastQ="";
+const rnd=n=>Math.floor(Math.random()*n);
+const GN=["🔤 الحرف","🐾 الحيوان","🅰️ أول حرف","🧩 ذاكرة"];
+GN.forEach((n,i)=>{const b=document.createElement("button");b.className="btn sm";b.textContent=n;b.onclick=()=>{game=i;round()};$("gm").appendChild(b)});
+function quiz(n,t,show){const s=new Set([t]);while(s.size<3)s.add(rnd(n));const box=$("opts");box.innerHTML="";
+  [...s].sort(()=>Math.random()-.5).forEach(i=>{const b=document.createElement("button");b.className="tile";b.style.background=col(i);b.textContent=show(i);
+    b.onclick=()=>{if(i===t){score++;say("أحسنت!");b.textContent="✔️";setTimeout(round,900)}else{b.classList.add("shake");say("حاول مرة أخرى")}};box.appendChild(b)})}
+function round(){
+  [...$("gm").children].forEach((b,i)=>b.classList.toggle("on",i==game));
+  if(game==0)return round1();
+  $("stars").textContent="⭐".repeat(Math.min(score,10));
+  if(game==1){const t=rnd(A.length);lastQ="أين "+A[t][0]+"؟";$("q").textContent=lastQ;quiz(A.length,t,i=>A[i][1]);say(lastQ)}
+  else if(game==2){const t=rnd(L.length);lastQ="بأي حرف تبدأ كلمة "+L[t][2]+"؟";$("q").textContent=L[t][3]+" "+L[t][2];quiz(L.length,t,i=>L[i][0]);say(lastQ)}
+  else memory();
+}
+function memory(){
+  lastQ="اعثر على الأزواج";$("q").textContent=lastQ;
+  const ids=[...Array(A.length).keys()].sort(()=>Math.random()-.5).slice(0,6);
+  const deck=[...ids,...ids].sort(()=>Math.random()-.5);
+  const box=$("opts");box.innerHTML="";let open=[],done=0,lock=false;
+  deck.forEach(id=>{const b=document.createElement("button");b.className="tile";b.style.background="var(--c4)";b.textContent="❓";
+    b.onclick=()=>{if(lock||b.dataset.f)return;b.dataset.f=1;b.textContent=A[id][1];b.style.background=col(id);open.push([b,id]);
+      if(open.length==2){const [x,y]=open;open=[];
+        if(x[1]==y[1]){done++;say(A[id][0]);if(done==6){score++;$("stars").textContent="⭐".repeat(Math.min(score,10));say("أحسنت! فزت");setTimeout(round,1800)}}
+        else{lock=true;setTimeout(()=>{[x,y].forEach(([c])=>{c.textContent="❓";c.style.background="var(--c4)";delete c.dataset.f});lock=false},800)}}};
+    box.appendChild(b)})}
+$("again").onclick=()=>say(game?lastQ:"أين حرف "+L[target][1]);
+const A=[["أسد","🦁","الأسد يزأر"],["قطة","🐱","القطة تموء"],["كلب","🐶","الكلب ينبح"],["بقرة","🐮","البقرة تخور"],["خروف","🐑","الخروف يثغو"],["حصان","🐴","الحصان يصهل"],["ديك","🐓","الديك يصيح"],["ضفدع","🐸","الضفدع ينقّ"],["نحلة","🐝","النحلة تطنّ"],["فيل","🐘","الفيل كبير جدا"],["زرافة","🦒","الزرافة رقبتها طويلة"],["قرد","🐒","القرد يتسلق الشجرة"],["أرنب","🐰","الأرنب يقفز"],["سمكة","🐟","السمكة تسبح"],["فراشة","🦋","الفراشة تطير"],["جمل","🐪","الجمل يعيش في الصحراء"],["بطة","🦆","البطة تسبح في الماء"],["عصفور","🐦","العصفور يغرّد"]];
+const ab=$("animals");A.forEach((a,i)=>{const b=document.createElement("button");b.className="tile";b.style.background=col(i);b.style.fontSize="1.1rem";b.innerHTML='<div style="font-size:3rem;line-height:1.1">'+a[1]+'</div>'+a[0];b.onclick=()=>open(i,"A");ab.appendChild(b)});
+const BS="بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ";
+const Q=[["الفاتحة",[BS,"ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ","ٱلرَّحْمَٰنِ ٱلرَّحِيمِ","مَٰلِكِ يَوْمِ ٱلدِّينِ","إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ","ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ","صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ"]],["الإخلاص",["قُلْ هُوَ ٱللَّهُ أَحَدٌ","ٱللَّهُ ٱلصَّمَدُ","لَمْ يَلِدْ وَلَمْ يُولَدْ","وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ"]],["الفلق",["قُلْ أَعُوذُ بِرَبِّ ٱلْفَلَقِ","مِن شَرِّ مَا خَلَقَ","وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ","وَمِن شَرِّ ٱلنَّفَّٰثَٰتِ فِى ٱلْعُقَدِ","وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ"]],["الناس",["قُلْ أَعُوذُ بِرَبِّ ٱلنَّاسِ","مَلِكِ ٱلنَّاسِ","إِلَٰهِ ٱلنَّاسِ","مِن شَرِّ ٱلْوَسْوَاسِ ٱلْخَنَّاسِ","ٱلَّذِى يُوَسْوِسُ فِى صُدُورِ ٱلنَّاسِ","مِنَ ٱلْجِنَّةِ وَٱلنَّاسِ"]],["الكوثر",["إِنَّآ أَعْطَيْنَٰكَ ٱلْكَوْثَرَ","فَصَلِّ لِرَبِّكَ وَٱنْحَرْ","إِنَّ شَانِئَكَ هُوَ ٱلْأَبْتَرُ"]]];
+const ar=n=>(n+"").replace(/\d/g,d=>"٠١٢٣٤٥٦٧٨٩"[d]);
+const qb=$("quran");
+qb.innerHTML='<p style="text-align:center;font-size:1rem">اضغط على الآية لتلوينها وسماعها بصوت الجهاز (نطق تقريبي). للاستماع شغّل مصحفاً مرتّلاً (مثل المنشاوي المعلّم) وتابع معه.</p>';
+Q.forEach(([n,vs],si)=>{const h=document.createElement("div");h.className="sn";h.textContent="سورة "+n;qb.appendChild(h);if(si){const b=document.createElement("div");b.className="bs";b.textContent=BS;qb.appendChild(b)}vs.forEach((t,i)=>{const v=document.createElement("button");v.className="v";v.textContent=t+" ﴿"+ar(i+1)+"﴾";v.onclick=()=>{v.classList.toggle("hl");say(t)};qb.appendChild(v)})});
+const D=[["🌅","عند الاستيقاظ","الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ"],["🌙","عند النوم","بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا"],["🍽️","قبل الطعام","بِسْمِ اللَّهِ"],["🥛","بعد الطعام","الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنَا وَسَقَانَا وَجَعَلَنَا مُسْلِمِينَ"],["👕","عند لبس الثوب","الْحَمْدُ لِلَّهِ الَّذِي كَسَانِي هَذَا وَرَزَقَنِيهِ مِنْ غَيْرِ حَوْلٍ مِنِّي وَلَا قُوَّةٍ"],["🏠","عند دخول المنزل","بِسْمِ اللَّهِ وَلَجْنَا، وَبِسْمِ اللَّهِ خَرَجْنَا، وَعَلَى اللَّهِ رَبِّنَا تَوَكَّلْنَا"],["🚪","عند الخروج من المنزل","بِسْمِ اللَّهِ، تَوَكَّلْتُ عَلَى اللَّهِ، وَلَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ"],["🚗","عند الركوب","سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَٰذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ وَإِنَّا إِلَىٰ رَبِّنَا لَمُنْقَلِبُونَ"],["💐","للوالدين","رَبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا"],["📚","لزيادة العلم","رَبِّ زِدْنِي عِلْمًا"]];
+const db=$("dua");
+D.forEach(([e,n,t])=>{const h=document.createElement("div");h.className="sn";h.textContent=e+" "+n;db.appendChild(h);const v=document.createElement("button");v.className="v";v.textContent=t;v.onclick=()=>{v.classList.toggle("hl");say(t)};db.appendChild(v)});
+</script>
+</body>
+</html>
